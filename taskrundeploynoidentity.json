@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries/taskRuns/",
+      "name": "huanwudfwesttest3/mytaskrun129",
+      "location": "[parameters('location')]",
+      "apiVersion": "2019-06-01-preview",
+      "properties": {
+          "runRequest": {
+            "type": "TaskRunRequest",
+            "taskName": "hello-world3",
+            "taskId": "subscriptions/f9d7ebed-adbd-4cb4-b973-aaf82c136138/resourceGroups/huanwudfwestgroup/providers/Microsoft.ContainerRegistry/registries/huanwudfwesttest3/tasks/hello-world3",
+            "values": [],
+            "platform": {
+                "os": "linux",
+                "architecture": "amd64"
+            },
+            "credentials": {}
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "taskRunName": {
+      "type": "string",
+      "value": "mytaskrun129"
+    }
+  }
+}
