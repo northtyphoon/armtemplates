@@ -51,24 +51,15 @@
       },
       "defaultValue": ""
     },
-    "sourceLocation": {
+    "taskContent": {
       "type": "string",
       "metadata": {
-        "description": "The location of the source to build the image"
+        "description": "The content of multi-step task template"
       }
-    },
-    "dockerFilePath": {
-      "type": "string",
-      "metadata": {
-        "description": "The relative path of the dockerfile in the source location"
-      },
-      "defaultValue": "Dockerfile"
     }
   },
   "variables": {
-    "repository": "hello-world-node",
-    "tag": "parameters('taskRunName')",
-    "imageName": "[concat(variables('repository'), ':', parameters('taskRunName'))]",
+    "encodedTaskContent": "[base64(parameters('taskContent'))]",
     "identity": {
       "type": "UserAssigned",
       "userAssignedIdentities": {
@@ -106,13 +97,8 @@
           "identity": "[if(not(empty(parameters('userAssignedIdentity'))), variables('identity'), '')]",
           "properties": {
             "runRequest": {
-              "type": "DockerBuildRequest",
-              "dockerFilePath": "[parameters('dockerFilePath')]",
-              "imageNames": [
-                "[variables('imageName')]"
-              ],
-              "sourceLocation": "[parameters('sourceLocation')]",
-              "isPushEnabled": true,
+              "type": "EncodedTaskRunRequest",
+              "encodedTaskContent": "[variables('encodedTaskContent')]",
               "platform": {
                 "os": "linux",
                 "architecture": "amd64"
@@ -127,14 +113,6 @@
     "registry": {
       "type": "string",
       "value": "[parameters('registryName')]"
-    },
-    "repository": {
-      "type": "string",
-      "value": "[variables('repository')]"
-    },
-    "tag": {
-      "type": "string",
-      "value": "[variables('tag')]"
     }
   }
 }
